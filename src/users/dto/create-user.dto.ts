@@ -1,16 +1,13 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, Length, Matches, MinLength } from "class-validator";
 import { Transform } from "class-transformer";
-import userRoleEnum  from "../enums/userRoleEnum";
 import UserRoleEnum from "../enums/userRoleEnum";
-import { User } from "../entities/user.entity";
 
 
 export class CreateUserDto {
+    @IsNotEmpty({message: "موبایل نمیتواند خالی باشد"})
     @IsString({ message: "موبایل باید یک رشته باشد"})
     @Length(11, 11, { message: 'شماره موبایل باید 11 رفم باشد'})
-    @IsNotEmpty({message: "موبایل نمیتواند خالی باشد"})
-    //@Matches('/^.{11}$/',null, {message: "شماره باید 11 رقم باشد"} ) // با رجکس میگیم ورودی حتما 11 رقم باشه 
-    @Transform(({ value })=> { value.trim() })
+    @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
     mobile: string;
 
     @IsString({ message: "نام باید یک رشته باشد"})

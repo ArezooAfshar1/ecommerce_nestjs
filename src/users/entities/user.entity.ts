@@ -12,7 +12,7 @@ export class User {
     @Column({ nullable: false, name: "display_name"})
     displayName: string;
   
-    @Column()
+    @Column({ nullable: true })
     password: string;
     
     @Column({ type: 'enum', enum: UserRoleEnum, default: UserRoleEnum.NormalUser })
