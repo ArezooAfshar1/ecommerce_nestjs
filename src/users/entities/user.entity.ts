@@ -18,9 +18,9 @@ export class User {
     @Column({ type: 'enum', enum: UserRoleEnum, default: UserRoleEnum.NormalUser })
     role: UserRoleEnum;
 
-    @CreateDateColumn({ name: "created_at"})
+    @CreateDateColumn({ name: "created_at", type: 'timestamp'}) // بصورت خودکار مقدار دهی میشه
     createdAt: Date;
 
-    @UpdateDateColumn({ name: "updated_at"})
+    @UpdateDateColumn({ name: "updated_at", type: 'timestamp'}) // بصورت خودکار مقدار دهی میشه
     updatedAt: Date
 }

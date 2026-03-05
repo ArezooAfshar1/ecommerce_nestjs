@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { UsersModule } from './users/users.module';
 
 
 @Module({
   imports: [
+    //Config
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    // DB Connection
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -20,6 +21,7 @@ import { UsersModule } from './users/users.module';
       entities: [__dirname + '/**/entities/*.entity{.ts, .js}'],
       synchronize: true
     }),
+    // Modules
     UsersModule
   ],
   controllers: [],
