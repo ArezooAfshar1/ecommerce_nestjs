@@ -29,7 +29,11 @@ export class AuthService {
     }
 
     const payload = {mobile: user.mobile, sub : user.id, displayName: user.displayName}
+    const token = this.jwtService.sign(payload);
 
-    
+    return {
+        accessToken: token
+    }
+
   }
 }

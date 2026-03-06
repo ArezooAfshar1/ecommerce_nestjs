@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
-export class RegisterDto {
+export class LoginDto {
   @IsString({ message: 'موبایل باید یک رشته باشد' })
   @IsNotEmpty({ message: 'موبایل نمیتواند خالی باشد' })
   @Length(11, 11, { message: 'شماره موبایل باید 11 رقم باشد' })
