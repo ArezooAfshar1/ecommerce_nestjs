@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,27 +22,45 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  async findAll(role?: UserRoleEnum ,limit: number = 10,  page: number = 1) {
-    const query = this.userRepository.createQueryBuilder('users')
+  async findAll(role?: UserRoleEnum, limit: number = 10, page: number = 1) {
+    const query = this.userRepository.createQueryBuilder('users');
 
-    if (role){
-      query.where('role = :role', {role})
+    if (role) {
+      query.where('role = :role', { role });
     }
 
-    query.skip((page - 1) * limit).take(limit)
+    query.skip((page - 1) * limit).take(limit);
 
     return await query.getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (!user) throw new NotFoundException(`کاربر ${id} پیدا نشد`);
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findOneByMobile(mobile: string) {
+    const user = await this.userRepository.findOneBy({ mobile });
+
+    if (!user) throw new NotFoundException(`کاربر ${mobile} پیدا نشد`);
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    const updateUser = await this.userRepository.update(id, {
+      displayName: updateUserDto.displayName,
+      role: updateUserDto.role,
+    });
+    return await this.findOne(id);
+  }
+
+  async remove(id: number) {
+    const result = await this.userRepository.delete(id);
+
+    if (result.affected === 0)
+      throw new NotFoundException('این کاربر پیدا نشد');
   }
 }
