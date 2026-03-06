@@ -60,7 +60,7 @@ export class UsersController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const user = await this.usersService.update(+id, updateUserDto) 
+    const user = await this.usersService.update(+id, updateUserDto);
 
     return {
       statusCode: HttpStatus.OK,
@@ -71,9 +71,9 @@ export class UsersController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    await this.usersService.remove(+id)
+    await this.usersService.remove(+id);
 
-        return {
+    return {
       statusCode: HttpStatus.OK,
       data: null,
       message: 'کاربر با موفقیت حذف شد',

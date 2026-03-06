@@ -21,6 +21,6 @@ export class RegisterDto {
   @IsString({ message: 'رمز عبور باید یک رشته باشد' })
   @IsNotEmpty({ message: 'رمز عبور نمیتواند خالی باشد' })
   @MaxLength(16, { message: 'رمز عبور باید حداکثر 16 کاراکتر باشد' })
-  //@MinLength(8, { message: 'رمز عبور باید حداقل 8 کاراکتر باشد' }) //comment for develop mode
+  @MinLength(8, { message: 'رمز عبور باید حداقل 8 کاراکتر باشد' }) //comment for develop mode
   password: string;
 }

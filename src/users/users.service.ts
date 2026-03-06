@@ -17,8 +17,12 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(dto: CreateUserDto): Promise<User> {
-    const user = this.userRepository.create(dto);
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const alreadyUser = await this.findOneByMobile(createUserDto.mobile, true)
+    if (alreadyUser){
+      throw new BadRequestException("کاربری با این شماره موبایل وجود دارد")
+    }
+    const user = this.userRepository.create(createUserDto);
     return this.userRepository.save(user);
   }
 
@@ -41,10 +45,12 @@ export class UsersService {
     return user;
   }
 
-  async findOneByMobile(mobile: string) {
+  async findOneByMobile(mobile: string, checkExist: boolean =false): Promise<User | null> {
     const user = await this.userRepository.findOneBy({ mobile });
 
-    if (!user) throw new NotFoundException(`کاربر ${mobile} پیدا نشد`);
+    if (!checkExist){
+      if (!user) throw new NotFoundException(`کاربر ${mobile} پیدا نشد`);
+    }
     return user;
   }
 
