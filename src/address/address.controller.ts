@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpStatus,
+  Query,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
@@ -8,27 +20,56 @@ export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Post()
-  create(@Body() createAddressDto: CreateAddressDto) {
-    return this.addressService.create(createAddressDto);
+  async create(@Body() createAddressDto: CreateAddressDto) {
+    const address = await this.addressService.create(createAddressDto);
+    return {
+      statusCode: HttpStatus.CREATED,
+      data: address,
+      message: 'ادرس با موفقیت ساخته شد',
+    };
   }
 
   @Get()
-  findAll() {
-    return this.addressService.findAll();
+  async findAll() {
+    const addresses = await this.addressService.findAll();
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: addresses,
+      message: 'ادرس با موفقیت دریافت شد',
+    };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.addressService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const address = await this.addressService.findOne(+id);
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: address,
+      message: 'ادرس با موفقیت دریافت شد',
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
-    return this.addressService.update(+id, updateAddressDto);
+  async update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
+    const address = await this.addressService.update(+id, updateAddressDto);
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: address,
+      message: 'ادرس با موفقیت اپدیت شد',
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.addressService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.addressService.remove(+id);
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: null,
+      message: 'ادرس با موفقیت حذف شد',
+    };
   }
 }
