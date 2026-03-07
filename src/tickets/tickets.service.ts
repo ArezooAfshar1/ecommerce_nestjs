@@ -1,26 +1,53 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTicketDto } from './dto/create-ticket.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Ticket } from './entities/ticket.entity';
+import { Repository } from 'typeorm';
+import { CreateTicketDto } from './dto/create-ticket.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class TicketsService {
-  create(createTicketDto: CreateTicketDto) {
-    return 'This action adds a new ticket';
+  constructor(
+    @InjectRepository(Ticket)
+    private readonly ticketRepository: Repository<Ticket>,
+    private readonly userService: UsersService,
+  ) {}
+
+  async create(createTicketDto: CreateTicketDto): Promise<Ticket> {
+    const { userId, replyTo, ...TicketData } = createTicketDto;
+    const user = await this.userService.findOne(userId);
+
+    let replyToTicket: any = null;
+    if (replyTo) {
+      replyToTicket = await this.ticketRepository.findOne({
+        where: { id: replyTo },
+        relations: ['replyTo'],
+      });
+      if (replyToTicket.replyTo) {
+        throw new BadRequestException('شما نمیتوانید این تیکت را ریپلای کنید');
+      }
+    }
+    const ticket = this.ticketRepository.create({
+      ...TicketData,
+      user,
+      replyTto: replyToTicket,
+    });
+
+    return this.ticketRepository.create(ticket);
   }
 
-  findAll() {
-    return `This action returns all tickets`;
+  async findAll() {
+    const tickets = await this.ticketRepository
+      .createQueryBuilder('tickets')
+      .where('tickets.replyToId IS NULL')
+      .getMany();
+
+    return tickets;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ticket`;
-  }
-
-  update(id: number, updateTicketDto: UpdateTicketDto) {
-    return `This action updates a #${id} ticket`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ticket`;
+  async findOne(id: number){
+    const ticket = await this.ticketRepository.findOneOrFail({where: {id}, relations: ['replies']});
+    return ticket
   }
 }

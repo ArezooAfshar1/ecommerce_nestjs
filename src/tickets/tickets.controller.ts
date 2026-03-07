@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpStatus,
+} from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
@@ -8,27 +17,43 @@ export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
   @Post()
-  create(@Body() createTicketDto: CreateTicketDto) {
-    return this.ticketsService.create(createTicketDto);
+  async create(@Body() createTicketDto: CreateTicketDto) {
+    const newTicket = await this.ticketsService.create(createTicketDto);
+    return {
+      statusCode: HttpStatus.OK,
+      data: newTicket,
+      message: 'تیکت با موفقیت ثبت شد',
+    };
   }
 
   @Get()
-  findAll() {
-    return this.ticketsService.findAll();
+  async findAll() {
+    const ticket = this.ticketsService.findAll();
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: ticket,
+      message: 'لیست تیکت با موفقیت ثبت شد',
+    };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const ticket = this.ticketsService.findOne(+id);
+    return {
+      statusCode: HttpStatus.OK,
+      data: ticket,
+      message: 'تیکت با موفقیت دریافت شد',
+    };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketsService.update(+id, updateTicketDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
+  //   return this.ticketsService.update(+id, updateTicketDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.ticketsService.remove(+id);
+  // }
 }
