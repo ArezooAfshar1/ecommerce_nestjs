@@ -8,6 +8,7 @@ import { TicketsModule } from './tickets/tickets.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { LoggerMiddleware } from './middlewares/logger/logger.middleware';
+import { BodyLoggerMiddleware } from './middlewares/body-logger/body-logger.middleware';
 
 
 @Module({
@@ -41,7 +42,7 @@ import { LoggerMiddleware } from './middlewares/logger/logger.middleware';
 export class AppModule {
   configure( consumer: MiddlewareConsumer){
     consumer
-    .apply(LoggerMiddleware)
+    .apply(LoggerMiddleware, BodyLoggerMiddleware)
     .forRoutes("*")
   }
 }
