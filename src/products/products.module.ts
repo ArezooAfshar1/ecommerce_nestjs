@@ -8,12 +8,12 @@ import { LoggerMiddleware } from 'src/middlewares/logger/logger.middleware';
   providers: [ProductsService],
 })
 export class ProductsModule {
-  configure( consumer: MiddlewareConsumer){
-    consumer
-    .apply(LoggerMiddleware)
-    .forRoutes(
-      { path: 'products', method: RequestMethod.POST },
-      { path: 'products/:id', method: RequestMethod.GET }
-    )
-  }
+  // configure( consumer: MiddlewareConsumer){
+  //   consumer
+  //   .apply(LoggerMiddleware)
+  //   .forRoutes(
+  //     { path: 'products', method: RequestMethod.POST },
+  //     { path: 'products/:id', method: RequestMethod.GET }
+  //   )
+  // }
 }

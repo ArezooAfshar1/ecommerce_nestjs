@@ -14,9 +14,9 @@ import { LoggerMiddleware } from "../middlewares/logger/logger.middleware";
 })
 
 export class UsersModule {
-  configure( consumer: MiddlewareConsumer ){
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes(UsersController);
-  }
+  // configure( consumer: MiddlewareConsumer ){
+  //   consumer
+  //     .apply(LoggerMiddleware)
+  //     .forRoutes(UsersController);
+  // }
 }
