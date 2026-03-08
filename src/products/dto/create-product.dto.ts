@@ -11,9 +11,9 @@ export class CreateProductDto {
     description: string;
 
     @IsInt()
-    stovk: number;
+    stock: number;
 
     @IsOptional()
     @IsArray()
-    categoryIds?: number;
+    categoryIds?: number[];
 }
