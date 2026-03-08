@@ -4,11 +4,11 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 export class BodyLoggerMiddleware implements NestMiddleware {
   use(req: any, res: any, next: () => void) {
     const body = req.body;
-    if(!body){
-      console.log("this request dont have body!")
-    }else{
-      console.log(body)
+    if( Object.keys(body).length === 0 ){
+      return res.status(400).send({ statusCode: 400, message: "this request dont have body!"})
     }
+
+    console.log(body);
     next();
   }
 }
