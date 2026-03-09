@@ -46,4 +46,17 @@ export class ProductsController {
       message: 'محصول با موفقیت دریافت شد',
     };
   }
+
+    @Patch(':id')
+    async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+      const product = await this.productsService.update(+id, updateProductDto);
+  
+      return {
+        statusCode: HttpStatus.OK,
+        data: product,
+        message: 'محصول با موفقیت اپدیت شد',
+      };
+    }
+
+    
 }

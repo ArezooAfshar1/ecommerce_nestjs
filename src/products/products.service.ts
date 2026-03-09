@@ -40,4 +40,23 @@ export class ProductsService {
     }
     return product;
   }
+
+  async update(id: number, updateProductDto: UpdateProductDto){
+    const { title, price, description , stock, categoryIds} = updateProductDto;
+
+    const product= await this.findOne(id);
+
+    if(title) product.title = title;
+    if(price) product.price = price;
+    if(description) product.description;
+    if(stock) product.stock;
+
+    if(categoryIds){
+      const categories = await this.categoryRepositry.findBy({id: In(categoryIds)})
+      product.categories = categories;
+    }
+
+    return await this.productRepositry.save(product)
+  }
+
 }
