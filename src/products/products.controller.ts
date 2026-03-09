@@ -1,16 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, HttpStatus } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { BookmarkProductDto } from './dto/bookmark-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -58,5 +50,14 @@ export class ProductsController {
       };
     }
 
-    
+    @Post('bookmark-product')
+    async bookmarkProduct(@Body() bookmarkProductDto: BookmarkProductDto){
+      const bookmarkData = await this.productsService.toggleBookmark(bookmarkProductDto.user_id, bookmarkProductDto.product_id);
+
+            return {
+        statusCode: HttpStatus.OK,
+        data: bookmarkData,
+        message: 'محصول با موفقیت ذخیره شد',
+      };
+    }
 }
