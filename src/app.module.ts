@@ -9,6 +9,7 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { LoggerMiddleware } from './middlewares/logger/logger.middleware';
 import { BodyLoggerMiddleware } from './middlewares/body-logger/body-logger.middleware';
+import { OrdersModule } from './orders/orders.module';
 
 
 @Module({
@@ -34,7 +35,8 @@ import { BodyLoggerMiddleware } from './middlewares/body-logger/body-logger.midd
     AddressModule,
     TicketsModule,
     ProductsModule,
-    CategoriesModule
+    CategoriesModule,
+    OrdersModule
   ],
   controllers: [],
   providers: [],

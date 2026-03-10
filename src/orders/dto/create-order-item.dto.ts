@@ -1,0 +1,8 @@
+import { IsNumber, IsNotEmpty } from "class-validator";
+
+export class CreateOrderItemDto {
+
+    @IsNumber()
+    @IsNotEmpty({ message: 'شناسه محصول نمی تواند خالی باشد' })
+    productId: number;
+}
