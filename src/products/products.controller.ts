@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  HttpStatus,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -27,7 +35,7 @@ export class ProductsController {
       message: 'محصولات با موفقیت دریافت شد',
     };
   }
-  
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const product = await this.productsService.findOne(+id);
@@ -39,25 +47,53 @@ export class ProductsController {
     };
   }
 
-    @Patch(':id')
-    async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-      const product = await this.productsService.update(+id, updateProductDto);
-  
-      return {
-        statusCode: HttpStatus.OK,
-        data: product,
-        message: 'محصول با موفقیت اپدیت شد',
-      };
-    }
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    const product = await this.productsService.update(+id, updateProductDto);
 
-    @Post('bookmark-product')
-    async bookmarkProduct(@Body() bookmarkProductDto: BookmarkProductDto){
-      const bookmarkData = await this.productsService.toggleBookmark(bookmarkProductDto.user_id, bookmarkProductDto.product_id);
+    return {
+      statusCode: HttpStatus.OK,
+      data: product,
+      message: 'محصول با موفقیت اپدیت شد',
+    };
+  }
 
-            return {
-        statusCode: HttpStatus.OK,
-        data: bookmarkData,
-        message: 'محصول با موفقیت ذخیره شد',
-      };
-    }
+  @Post('bookmark-product')
+  async bookmarkProduct(@Body() bookmarkProductDto: BookmarkProductDto) {
+    const bookmarkData = await this.productsService.toggleBookmark(
+      bookmarkProductDto.user_id,
+      bookmarkProductDto.product_id,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: bookmarkData,
+      message: 'محصول با موفقیت ذخیره شد',
+    };
+  }
+
+  @Post('add-basket')
+  async addItemTobasket(@Body() bookmarkProductDto: BookmarkProductDto) {
+    const bookmarkData = await this.productsService.addItenToBasket(
+      bookmarkProductDto.user_id,
+      bookmarkProductDto.product_id,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: bookmarkData,
+      message: 'محصول با موفقیت به سبد خرید اضافه شد',
+    };
+  }
+
+  @Post('remove-basket')
+  async removeItemFromBasket(@Body() bookmarkProductDto: BookmarkProductDto): Promise<void> {
+    await this.productsService.removeProductFromBasket(
+      bookmarkProductDto.user_id,
+      bookmarkProductDto.product_id,
+    );
+  }
 }

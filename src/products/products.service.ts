@@ -105,4 +105,15 @@ export class ProductsService {
       return await this.bookmarkProductRepositry.save(newBookmark)
     }
   }
+
+  async addItenToBasket(userId: number, productId: number){
+    const product = await this.productRepositry.findOne({where: {id: productId}})
+    return await this.userService.addProductToBasket(userId, product)
+    
+  }
+
+    async removeProductFromBasket(userId: number, productId: number){
+    const product = await this.productRepositry.findOne({where: {id: productId}})
+    return await this.userService.removeProductFromBasket(userId, product)
+  }
 }

@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Category } from 'src/categories/entities/category.entity';
 import { BookmarkProduct } from './bookmark-product.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity('products')
 export class Product {
@@ -44,7 +45,9 @@ export class Product {
   })
   categories: Category[];
 
+  @ManyToMany(() => User, (user) => user.basketItems)
+  baskets: User[];
 
-  @OneToMany(()=> BookmarkProduct, bookmark => bookmark.product)
+  @OneToMany(() => BookmarkProduct, (bookmark) => bookmark.product)
   bookmarks: BookmarkProduct[];
 }

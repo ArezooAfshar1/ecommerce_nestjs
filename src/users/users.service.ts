@@ -69,4 +69,34 @@ export class UsersService {
     if (result.affected === 0)
       throw new NotFoundException('این کاربر پیدا نشد');
   }
+
+  async addProductToBasket(userId, product){
+    const user = await this.userRepository.findOne({where: {id: userId}, relations: ['basket_items']});
+    if(user){
+      user.basketItems.push(product);
+      return await this.userRepository.save(user);
+    }else{
+      throw new NotFoundException("این کاربر پیدا نشد")
+    }
+  }
+
+  async removeProductFromBasket(userId, product):Promise<void> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['basket_items']
+    });
+
+    if (!user) {
+      throw new NotFoundException('user not found')
+    }
+
+    const productIndex = user.basketItems.findIndex( item => item.id === product.id);
+    if (productIndex === -1){
+      throw new NotFoundException('Product not found in the basket');
+    }
+
+    user.basketItems.slice(productIndex, 1);
+
+    await this.userRepository.save(user)
+  }
 }
