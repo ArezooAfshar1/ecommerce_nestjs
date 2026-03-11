@@ -5,12 +5,12 @@ import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
 
+@Public()
 @ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authservice: AuthService) {}
 
-  @Public()
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     const register = await this.authservice.register(
@@ -26,7 +26,6 @@ export class AuthController {
     };
   }
 
-  @Public()
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const login = await this.authservice.login(loginDto.mobile, loginDto.password);
