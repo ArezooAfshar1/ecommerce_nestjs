@@ -9,14 +9,17 @@ import {
   Param,
   Delete,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import UserRoleEnum from './enums/userRoleEnum';
 import { Response } from 'express';
-import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiExcludeController, ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
 
+@ApiBearerAuth()
 @ApiTags('Users - مدیریت کاربران')
 @Controller('users')
 export class UsersController {
@@ -51,10 +54,10 @@ export class UsersController {
     };
   }
 
+  @UseGuards(JwtAuthGaurd)
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     const user = await this.usersService.findOne(+id);
-
     return {
       statusCode: HttpStatus.OK,
       data: user,

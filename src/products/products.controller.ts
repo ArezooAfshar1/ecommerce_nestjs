@@ -12,7 +12,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { BookmarkProductDto } from './dto/bookmark-product.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('Products - مدیریت محصولات')
 @Controller('products')
 export class ProductsController {

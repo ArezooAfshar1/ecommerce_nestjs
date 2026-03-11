@@ -32,3 +32,4 @@ export class CreateUserDto {
     @IsOptional()
     role: UserRoleEnum
 }
+

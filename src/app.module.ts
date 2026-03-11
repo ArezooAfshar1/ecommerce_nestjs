@@ -8,8 +8,9 @@ import { TicketsModule } from './tickets/tickets.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { LoggerMiddleware } from './middlewares/logger/logger.middleware';
-import { BodyLoggerMiddleware } from './middlewares/body-logger/body-logger.middleware';
 import { OrdersModule } from './orders/orders.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGaurd } from './auth/guards/jwt-auth.guard';
 
 
 @Module({
@@ -39,12 +40,15 @@ import { OrdersModule } from './orders/orders.module';
     OrdersModule
   ],
   controllers: [],
-  providers: [],
+  providers: [{
+    provide: APP_GUARD,
+    useClass: JwtAuthGaurd
+  }],
 })
 export class AppModule {
   configure( consumer: MiddlewareConsumer){
     consumer
-    .apply(LoggerMiddleware, BodyLoggerMiddleware)
+    .apply(LoggerMiddleware)
     .forRoutes("*")
   }
 }
