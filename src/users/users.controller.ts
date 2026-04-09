@@ -14,18 +14,22 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import UserRoleEnum from './enums/userRoleEnum';
+import Role from './enums/role';
 import { Response } from 'express';
-import { ApiExcludeEndpoint, ApiExcludeController, ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiExcludeController, ApiOperation, ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
+
+@Roles(Role.Admin, Role.Moderator)
 @ApiBearerAuth()
 @ApiTags('Users - مدیریت کاربران')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  
+  @Roles(Role.Admin, Role.Moderator)
   @ApiOperation({ summary: "ایجاد کاربر جدید"})
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -38,10 +42,22 @@ export class UsersController {
     };
   }
 
+  @ApiQuery({
+    name: "limit",
+    required: false
+  })
+    @ApiQuery({
+    name: "role",
+    required: false
+  })
+    @ApiQuery({
+    name: "page",
+    required: false
+  })
   @Get()
   async findAll(
     @Res() res: Response,
-    @Query('role') role?: UserRoleEnum,
+    @Query('role') role?: Role,
     @Query('limit') limit: number = 10,
     @Query('page') page: number = 1,
   ) {

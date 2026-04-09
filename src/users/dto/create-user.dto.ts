@@ -1,6 +1,6 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, Length, Matches, MinLength } from "class-validator";
 import { Transform } from "class-transformer";
-import UserRoleEnum from "../enums/userRoleEnum";
+import Role from "../enums/role";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { User } from "../entities/user.entity";
 
@@ -25,11 +25,11 @@ export class CreateUserDto {
     password: string;
 
     @ApiPropertyOptional({
-        enum: UserRoleEnum,
-        example: UserRoleEnum.NormalUser,
+        enum: Role,
+        example: Role.NormalUser,
         description: 'نقش کاربر'})
-    @IsEnum(UserRoleEnum, {message: "نقش کاربر باید یکی از مقادیر (admin / user) باشد"})
+    @IsEnum(Role, {message: "نقش کاربر باید یکی از مقادیر (admin / user) باشد"})
     @IsOptional()
-    role: UserRoleEnum
+    role: Role
 }
 

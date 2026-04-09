@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import UserRoleEnum from 'src/users/enums/userRoleEnum';
+import Role from 'src/users/enums/role';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AuthService {
       mobile,
       password: hashedPassword,
       displayName,
-      role: UserRoleEnum.NormalUser,
+      role: Role.NormalUser,
     });
   }
 
@@ -36,6 +36,7 @@ export class AuthService {
       mobile: user.mobile,
       sub: user.id,
       displayName: user.displayName,
+      role: user.role
     };
     const token = this.jwtService.sign(payload);
 
