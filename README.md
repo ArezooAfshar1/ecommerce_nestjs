@@ -102,5 +102,3 @@ src/
 ```
 
 ---
-
-**Arezo Afshar**
